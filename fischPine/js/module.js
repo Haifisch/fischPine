@@ -1,11 +1,15 @@
 registerController('PabloFiController', ['$api', '$scope', function($api, $scope) {
 	$scope.moduleIPAddress = "";
+	$scope.modulePingCount = "";
 	$scope.modulePorts = "";
 	$scope.outputContent = "";
 	$scope.pingOutputContent = "";
+	$scope.tracerouteOutputContent = "";
 	$scope.moduleVersion = "1.0.0";
 	var refreshInterval = null;
+	var tracerouteInterval = null;
 	var intervalCount = 0;
+	var tracerouteIntervalCount = 0;
 
 	$scope.startPing = (function() {
 		console.log("startPing() "+$scope.modulePingIPAddress);
@@ -13,7 +17,8 @@ registerController('PabloFiController', ['$api', '$scope', function($api, $scope
 		$api.request({
 			module: "fischPine",
 			action: "pingAddress",
-			modulePingIPAddress: $scope.modulePingIPAddress
+			modulePingIPAddress: $scope.modulePingIPAddress,
+			modulePingCount: $scope.modulePingCount
 		}, function(response) {
 			console.log("pingAddress => "+JSON.stringify(response));
 			var finalStr = "";
@@ -64,6 +69,37 @@ registerController('PabloFiController', ['$api', '$scope', function($api, $scope
 				refreshInterval = null;
 			}
 		})
+	});
+
+	// moduleTracerouteAddress
+	$scope.startTraceroute = (function() {
+		$scope.tracerouteOutputContent = "running traceroute on "+$scope.moduleTracerouteAddress;
+		$api.request({
+			module: "fischPine",
+			action: "tracerouteAddress",
+			moduleTracerouteAddress: $scope.moduleTracerouteAddress
+		}, function(response) {
+			console.log("tracerouteAddress => "+JSON.stringify(response));
+		})
+		if (tracerouteInterval) {
+			clearInterval(tracerouteInterval);
+			tracerouteInterval = null;
+		}
+		tracerouteInterval = setInterval(function() {
+			$api.request({
+				module: "fischPine",
+				action: "refreshTracerouteOutput"
+			}, function (response) {
+				console.log("refreshTracerouteOutput => "+JSON.stringify(response));
+				$scope.tracerouteOutputContent = response;
+				if (tracerouteInterval && tracerouteIntervalCount >= 160) {
+					clearInterval(tracerouteInterval);
+					tracerouteInterval = null;
+				} else {
+					tracerouteIntervalCount += 1;
+				}
+			});	
+		}, 1000);
 	});
 
 }]);

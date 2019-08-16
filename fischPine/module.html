@@ -12,54 +12,86 @@
 	                </div>
 	            </div>
 	        </div>
-			<div class="panel panel-default" ng-controller="PabloFiController">
-				<div class="panel-heading">
-					<h3 class="panel-title">'nmap -p'</h3>
-				</div>
-				<div class="panel-body">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-2 control-label">IP</label>
-							<div class="col-sm-7">
-								<input type="text" class="form-control" ng-model="moduleIPAddress" placeholder="ex. 172.16.42.69">
+	        <!-- nmap group -->
+	        <div class="panel-group">
+				<div class="panel panel-default" ng-controller="PabloFiController">
+					<div class="panel-heading">
+						<h3 class="panel-title">'nmap -p'</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">IP</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" ng-model="moduleIPAddress" placeholder="ex. 172.16.42.69">
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">Port(s)</label>
-							<div class="col-sm-7">
-								<input type="text" class="form-control" ng-model="modulePorts" placeholder="ex. 80, or range 25-100">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Port(s)</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" ng-model="modulePorts" placeholder="ex. 80, or range 25-100">
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-7 col-md-offset-2">
-								<button class="btn btn-success" ng-click="startPortScan();">Scan</button>
+							<div class="form-group">
+								<div class="col-sm-7 col-md-offset-2">
+									<button class="btn btn-success" ng-click="startPortScan();">scan</button>
+								</div>
 							</div>
-						</div>
-					</form>
-				</div>
-				<div class="panel-body">
-					<textarea class="form-control" rows="10">{{ outputContent }}</textarea>
-				</div>
-				<div class="panel-heading">
-					<h3 class="panel-title">'ping -n 5'</h3>
-				</div>
-				<div class="panel-body">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-2 control-label">IP</label>
-							<div class="col-sm-7">
-								<input type="text" class="form-control" ng-model="modulePingIPAddress" placeholder="172.16.42.69">
+						</form>
+					</div>
+					<div class="panel-body">
+						<textarea class="form-control" rows="10">{{ outputContent }}</textarea>
+					</div>
+					<!-- ping group -->
+					<div class="panel-heading">
+						<h3 class="panel-title">'ping -n'</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Address</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" ng-model="modulePingIPAddress" placeholder="ex. 172.16.42.69, or google.com">
+								</div>
 							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-7 col-md-offset-2">
-								<button class="btn btn-success" ng-click="startPing();">Ping</button>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Ping Count</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" ng-model="modulePingCount" placeholder="5">
+								</div>
 							</div>
-						</div>
-					</form>
-				</div>
-				<div class="panel-body">
-					<textarea class="form-control" rows="10">{{ pingOutputContent }}</textarea>
+							<div class="form-group">
+								<div class="col-sm-7 col-md-offset-2">
+									<button class="btn btn-success" ng-click="startPing();">ping</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="panel-body">
+						<textarea class="form-control" rows="10">{{ pingOutputContent }}</textarea>
+					</div>
+					<!-- traceroute group -->
+					<div class="panel-heading">
+						<h3 class="panel-title">'traceroute'</h3>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Address</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" ng-model="moduleTracerouteAddress" placeholder="ex. google.com">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-7 col-md-offset-2">
+									<button class="btn btn-success" ng-click="startTraceroute();">traceroute</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="panel-body">
+						<textarea class="form-control" rows="10">{{ tracerouteOutputContent }}</textarea>
+					</div>
 				</div>
 			</div>
 		</div>
