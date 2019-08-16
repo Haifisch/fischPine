@@ -9,7 +9,7 @@ registerController('PabloFiController', ['$api', '$scope', function($api, $scope
 
 	$scope.startPing = (function() {
 		console.log("startPing() "+$scope.modulePingIPAddress);
-		$scope.pingOutputContent = "Starting ping...";
+		$scope.pingOutputContent = "running ping...";
 		$api.request({
 			module: "fischPine",
 			action: "pingAddress",
@@ -26,7 +26,7 @@ registerController('PabloFiController', ['$api', '$scope', function($api, $scope
 
 	$scope.startPortScan = (function() {
 		console.log("startPortScan() "+$scope.moduleIPAddress);
-		$scope.outputContent = "Starting scan...";
+		$scope.outputContent = "running nmap on "+$scope.moduleIPAddress+":"+$scope.modulePorts;
 		$api.request({
 			module: "fischPine",
 			action: "startPortScan",
@@ -38,13 +38,15 @@ registerController('PabloFiController', ['$api', '$scope', function($api, $scope
 				clearInterval(refreshInterval);
 			}
 			refreshInterval = setInterval(function() {
-				$scope.refreshOutput();
-				if (intervalCount >= 60) {
+				if (intervalCount >= 120) {
 					intervalCount = 0;
 					clearInterval(refreshInterval);
+					refreshInterval = null;
 				} else {
+					$scope.outputContent = $scope.outputContent+".";
 					intervalCount += 1;
 				}
+				$scope.refreshOutput();
 			}, 1000);
 		})
 	});
@@ -54,8 +56,13 @@ registerController('PabloFiController', ['$api', '$scope', function($api, $scope
 			module: "fischPine",
 			action: "refreshOutput"
 		}, function(response) {
-			console.log("refreshOutput => "+response);
-			$scope.outputContent = response.trim();
+			const regex = /^(Starting Nmap)\s(\d.\d\d)\s\((.*?)\)[\w\W](.*)(\r\n)?$/gm;
+			console.log("refreshOutput => "+response.replace(regex, '').trim());
+			$scope.outputContent = response.replace(regex, '').trim();			
+			if (response.includes("Nmap done:") && refreshInterval) {
+				clearInterval(refreshInterval);
+				refreshInterval = null;
+			}
 		})
 	});
 

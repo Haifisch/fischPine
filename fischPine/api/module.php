@@ -38,12 +38,8 @@ class fischPine extends Module
 			$output = file_get_contents("/tmp/nmap.scan");
 			if (!empty($output)) {
 				$this->response = $output;
-			} else {
-				$this->response = "Empty log...";
 			}
-		} else {
-			$this->response = "nmap is not running...";
-		}
+		} 
 	}
 
 	private function startPortScan() 
@@ -51,11 +47,11 @@ class fischPine extends Module
 		$moduleIPAddress = $this->request->moduleIPAddress;
 		$modulePorts = $this->request->modulePorts;
 		if ($this->checkRunning("nmap")) {
-			$this->execBackground("killall nmap");
+			shell_exec("killall nmap");
 		}
 		$full_cmd = "/usr/bin/nmap -p ".$modulePorts." ".$moduleIPAddress." > /tmp/nmap.scan";
-		$shoutput = shell_exec($full_cmd);
-		$this->response = array('success' => $shoutput);
+		shell_exec($full_cmd);
+		$this->response = array('success' => true);
 	}
 }
 
